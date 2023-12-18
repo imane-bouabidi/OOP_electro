@@ -1,6 +1,8 @@
 <?php
 require_once 'C:\xampp\htdocs\projects\poo brief 1\database\connexion.php';
 require_once 'C:\xampp\htdocs\projects\poo brief 1\categories.php';
+define('ROOTPATH', __DIR__);
+
 class CategoriesDAO{
     private $pdo;
 
@@ -8,16 +10,16 @@ class CategoriesDAO{
         $this->pdo = Database::getInstance()->getConnection(); 
     }
 
-    public function add_Categpry($name, $description, $image){
-        $add_Categpry = "INSERT INTO category (name,description,image)
-        VALUES ($name, $description, $image);";
-        $stmt = $pdo->prepare($add_Categpry);
+    public function add_Category($name, $description, $image){
+        $add_Categpry = "INSERT INTO category
+        VALUES (0,'$name', '$description', '$image');";
+        $stmt = $this->pdo->prepare($add_Categpry);
         $stmt->execute();
     }
 
     public function get_categories(){
         $get = "SELECT * FROM category";
-        $stmt = $this->pdo->query($get);
+        $stmt = $this->pdo->prepare($get);
         $stmt->execute();
         $categoriesDATA = $stmt->fetchAll();
         $categories = array();
@@ -32,14 +34,19 @@ class CategoriesDAO{
                                     description = '$description',
                                     image = '$image',
                                     WHERE reference = '$id'";   
-        $stmt = $pdo->prepare($update_Category);
+        $stmt = $this->pdo->prepare($update_Category);
         $stmt->execute();
     }
 
     public function Delete_category($id){
-        $delete = "DELETE FROM category where reference = $id;";
-        $stmt = $pdo->prepare($delete);
+        $delete = "DELETE FROM category where id = '$id';";
+        $stmt = $this->pdo->prepare($delete);
         $stmt->execute();
+        header('Location:Pagecategories.php');
     }
 }
+// $categorydao = new CategoriesDAO();
+// $categorydao->add_Category("youcode","youcode","img");
+// echo "category inserted  ";
+// echo ROOTPATH;
 ?>

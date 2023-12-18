@@ -3,6 +3,11 @@ require './dao/categoriesDAO.php';
 $categories = new CategoriesDAO();
 $categorieDATA = $categories->get_categories();
 $pdo = Database::getInstance()->getConnection();
+
+if (isset($_GET['delete'])) {
+    $id= $_GET['delete'];
+    $categories->Delete_category($id);
+}
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +70,7 @@ $pdo = Database::getInstance()->getConnection();
                                     <div class="mt-3 flex items-end justify-between">
                                         <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
 
-                                            <a href="action_cat.php?delete='.$category->getName().'"><button class="text-sm">Supprimer</button></a>
+                                            <a href="Pagecategories.php?delete='.$category->getId().'"><button class="text-sm">Supprimer</button></a>
                                         </div>
                                         <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
 

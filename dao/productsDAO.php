@@ -9,16 +9,16 @@ class productsDAO{
     }
     
     public function add_Product($name,$code_barre,$prix_achat,$prix_final,$description,$quantité_min,$quantité_stock,$offre_prix,$category,$image){
-        $add_Product = "INSERT INTO product (ettiquette,code_barre,prix_achat,prix_final,description,quantité_min,quantité_stock,offre_prix,categorie,image)
-        VALUES ($name,$code_barre,$prix_achat,$prix_final,$description,$quantité_min,$quantité_stock,$offre_prix,$category,$image);";
-        $stmt = $pdo->prepare($add_Product);
+        $add_Product = "INSERT INTO product 
+        VALUES (0,'$name','$code_barre','$prix_achat','$prix_final','$description','$quantité_min','$quantité_stock','$offre_prix','$category',0,'$image');";
+        $stmt = $this->pdo->prepare($add_Product);
         $stmt->execute();
     }
 
 
     public function get_products(){
         $query = "SELECT * FROM product";
-        $stmt = $this->pdo->query($query);
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $productsDATA = $stmt->fetchALL();
         $products = array();

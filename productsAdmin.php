@@ -1,6 +1,6 @@
 <?php
-require 'dao/categoriesDAO.php';
-$categories = new CategoriesDAO();
+require 'dao/productsDAO.php';
+$products = new productsDAO();
 ?>
 
 
@@ -14,23 +14,14 @@ $categories = new CategoriesDAO();
 </head>
 <body>
   <?php 
-  $category = "";
-  $description = "";
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (isset($_FILES['imageToUpload'])) {
       $nameimage = $_FILES['imageToUpload']['name'];
   }
-  
-  else {
-      echo "image not found!";
-  }
-  
-      $description = $_POST["descritpion"];
-      $category = $_POST["category"];
-      if ($category != "" && !empty($nameimage) && $description != "") {
+      if (isset($_POST["name"])) {
         move_uploaded_file($_FILES['imageToUpload']['tmp_name'], "assets/image_category/" . $_FILES['imageToUpload']['name']);
-        $categories->add_Category($category,$description,$nameimage);  
-        header('Location:pushcategory.php');
+        $products->add_Product($_POST["name"],$_POST["code_barre"],$_POST["prix_achat"],$_POST["prix_final"],$_POST["description"],$_POST["quantité_min"],$_POST["quantité_stock"],$_POST["offre_prix"],$_POST["category"],$nameimage);  
+        header('Location:productsAdmin.php');
         exit();
       } else {
           echo 'error';
@@ -47,23 +38,23 @@ $categories = new CategoriesDAO();
         <a href="#">
         <form  method="POST" enctype="multipart/form-data">
           <div class="relative flex items-end overflow-hidden rounded-xl">
-          
-    
-            <input type="file" name="imageToUpload">
-
-    
-          
-            
+            <input require type="file" name="imageToUpload">
           </div>
   
           <div class="mt-10 p-2">
-            <div class="flex">
+                <input require class="text-slate-700 border-0" name="name" placeholder="Nom"></input>
+                <input require class="text-slate-700" name="code_barre" placeholder="code barre"></input>
             
-            <input class="text-slate-700" name="category" placeholder="name de category"></input>
+                <input  require  class="text-slate-700" name="prix_achat" placeholder="prix achat"></input>
+                <input  require  class="text-slate-700" name="prix_final" placeholder="prix final"></input>
+            
+                <input  require  class="text-slate-700" name="description" placeholder="description here"></input>
+                <input  require  class="text-slate-700" name="quantité_min" placeholder="quantité minimale"></input>
+            
+                <input  require  class="text-slate-700" name="quantité_stock" placeholder="quantité en stock"></input>
+                <input  require  class="text-slate-700" name="offre_prix" placeholder="offre en prix"></input>
 
-            <input class="text-slate-700" name="descritpion" placeholder="description here"></input>
-            
-            </div>
+                <input  require  class="text-slate-700" name="category" placeholder="id du category"></input>
             
   
             <div class="mt-3 flex items-end justify-between">
