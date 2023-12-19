@@ -1,4 +1,5 @@
 <?php
+// session_start();
 require './dao/categoriesDAO.php';
 $categories = new CategoriesDAO();
 $categorieDATA = $categories->get_categories();
@@ -8,6 +9,9 @@ if (isset($_GET['delete'])) {
     $id= $_GET['delete'];
     $categories->Delete_category($id);
 }
+// if (isset($_GET['edit'])) {
+//     $_SESSION['CatId']= $_GET['edit'];
+// }
 ?>
 
 <!DOCTYPE html>
@@ -75,7 +79,7 @@ if (isset($_GET['delete'])) {
                                         <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
 
 
-                                            <a href="edit_cat.php?edit='.$category->getName().'"><button class="text-sm">Modifier</button></a>
+                                            <a href="edit_cat.php?edit='.$category->getId().'"><button class="text-sm">Modifier</button></a>
                                         </div>
                                     </div>
                                 </div>

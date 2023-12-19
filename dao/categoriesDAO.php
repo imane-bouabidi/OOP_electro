@@ -29,11 +29,23 @@ class CategoriesDAO{
         return $categories;
     }
 
+    public function get_category_ById($id){
+        $get = "SELECT * FROM category where id = '$id'";
+        $stmt = $this->pdo->prepare($get);
+        $stmt->execute();
+        $categoriesDATA = $stmt->fetchAll();
+        $categories = array();
+        foreach($categoriesDATA as $category){
+            $categories[] = new Catagory($category['id'],$category['name'], $category['description'], $category['image']);
+        }
+        return $categories;
+    }
+
     public function update_Category($id,$name, $description, $image){
         $update_Category = "UPDATE category SET name = '$name',
                                     description = '$description',
-                                    image = '$image',
-                                    WHERE reference = '$id'";   
+                                    image = '$image'
+                                    WHERE id = '$id';";   
         $stmt = $this->pdo->prepare($update_Category);
         $stmt->execute();
     }
