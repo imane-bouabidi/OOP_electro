@@ -9,8 +9,9 @@ class Users{
         private $ville;
         private $password;
         private $type;
+        private $verified;
 
-        public function __construct($id,$username,$email,$phone,$adresse,$ville,$password,$type) {
+        public function __construct($id,$username,$email,$phone,$adresse,$ville,$password,$type,$verified) {
             $this->id = $id;
             $this->username = $username;
             $this->email=$email;
@@ -18,7 +19,8 @@ class Users{
             $this->adresse= $adresse;
             $this->ville=$ville;
             $this->password=$password;
-            $this->ype = $type;
+            $this->type = $type;
+            $this->verified=$verified;
         }
 
 
@@ -96,6 +98,14 @@ class Users{
                 $this->id = $id;
 
                 return $this;
+        }
+
+        /**
+         * Get the value of verified
+         */ 
+        public function getVerified()
+        {
+                return $this->verified;
         }
     }
 

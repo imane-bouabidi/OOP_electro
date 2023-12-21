@@ -1,6 +1,7 @@
 <?php
 require './dao/productsDAO.php';
 require './dao/categoriesDAO.php';
+require './dao/comm_prdDAO.php';
 
 $products = new productsDAO();
 $productDATA = $products->get_products();
@@ -8,7 +9,18 @@ $POPproductDATA = $products->get_popular_products();
 
 $categories = new CategoriesDAO();
 $categorieDATA = $categories->get_categories();
+
+$comm_prod = new ProCommandeDAO();
+
 $pdo = Database::getInstance()->getConnection();
+
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    if(isset($_POST['add_to_cart'])) {
+        $comm_prod->add_to_commande($id);
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -91,13 +103,14 @@ $pdo = Database::getInstance()->getConnection();
                                 <div class="mt-3 flex items-end justify-between">
                                     <p class="text-lg font-bold text-blue-500">$'. $row->getPrix_final().'</p>
 
-                                    <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                        </svg>
-
-                                        <a href="action_cart.php?id= '. $row->getId() .'"><button class="text-sm">Add to cart</button></a>
-                                    </div>
+                                    <form method="post" action="productPage.php?id='.$row->getId().'">
+                                        <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                                            </svg>
+                                            <button name="add_to_cart" type="submit" class="text-sm">Add to cart</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </a>

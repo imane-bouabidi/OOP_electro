@@ -23,7 +23,7 @@ class productsDAO{
         $productsDATA = $stmt->fetchALL();
         $products = array();
         foreach($productsDATA as $product){
-            $products[] = new Products(0,$product['name'],$product['code_barre'],$product['prix_achat'],$product['prix_final'],$product['description'],$product['quantité_min'],$product['quantité_stock'],$product['offre_prix'],$product['category'],$product['image']);
+            $products[] = new Products($product['id'],$product['name'],$product['code_barre'],$product['prix_achat'],$product['prix_final'],$product['description'],$product['quantité_min'],$product['quantité_stock'],$product['offre_prix'],$product['category'],$product['image']);
         }
 
         return $products;

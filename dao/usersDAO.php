@@ -7,9 +7,9 @@ class usersDAO{
         $this->pdo = Database::getInstance()->getConnection(); 
     }
 
-    public function add_User($username,$email,$phone,$adresse,$ville,$password,$type){
+    public function add_User($username,$email,$phone,$adresse,$ville,$password,$type,$verfied){
         $query = "INSERT INTO users (username,email,phone,adresse,ville,password,type) 
-        VALUES ($username,$email,$phone,$adresse,$ville,$password,$type);";
+        VALUES ('$username','$email','$phone','$adresse','$ville','$password','$type','$verfied');";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
     }
@@ -21,30 +21,32 @@ class usersDAO{
         $usersList = $stmt->fetchAll();
         $users = array();
         foreach ($usersList as $user) {
-            $users[] = new users(0,$user["username"],$user["email"],$user["phone"],$user["adresse"],$user["ville"],$user["password"],$user["type"]);
+            $users[] = new users($user["id"],$user["username"],$user["email"],$user["phone"],$user["adresse"],$user["ville"],$user["password"],$user["type"],$user["verified"]);
         }
         return $users;
     }
     
     public function User_validation($id){
-        $user = "UPDATE users SET type = 'user' where id = $id;";
+        $user = "UPDATE users SET verified = true where id = '$id';";
         $stmt = $this->pdo->prepare($user);
         $stmt->execute();
-        return $stmt;
+        // exit();
     }
     
     public function User_to_admin($id){
-        $admin = "UPDATE users SET type = 'admin' where id = $id;";
+        $admin = "UPDATE users SET type = 'admin' where id = '$id';";
         $stmt = $this->pdo->prepare($admin);
         $stmt->execute();
-        return $stmt;
+        // header('Location:admin.php');
+        // exit();
     }
     
     public function Delete_user($id){
-        $delete = "DELETE FROM users where id = $id;";
+        $delete = "DELETE FROM users where id = '$id';";
         $stmt = $this->pdo->prepare($delete);
         $stmt->execute();
-        return $stmt;
+        header('Location:admin.php');
+        // exit();
     }
 
 }

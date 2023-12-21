@@ -11,6 +11,7 @@ CREATE TABLE users (
    adresse varchar(40),
    ville varchar(40),
    password varchar(25),
+   verified boolean DEFAULT false,
    type ENUM('unverified', 'user', 'admin') DEFAULT 'unverified'
 );
 -- @block
