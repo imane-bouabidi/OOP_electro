@@ -1,9 +1,9 @@
 <?php
-require_once 'C:\xampp\htdocs\projects\poo brief 1\database\connexion.php';
 include_once 'C:\xampp\htdocs\projects\poo brief 1\dao\commandeDAO.php';
-include_once 'C:\xampp\htdocs\projects\poo brief 1\dao\productsDAO.php';
-$commande = new CommandeDAO();
-$produit = new productsDAO();
+include_once 'C:\xampp\htdocs\projects\poo brief 1\products.php';
+include_once 'C:\xampp\htdocs\projects\poo brief 1\facture.php';
+// $commande = new CommandeDAO();
+// $produit = new productsDAO();
 
 class ProCommandeDAO{
 
@@ -44,7 +44,7 @@ class ProCommandeDAO{
             // Le produit existe déjà, augmenter la quantité
             $new_quantity = $existing_product['quantite'] + 1;
 
-            $update_quantity = "UPDATE commande_produit SET quantite = :quantite WHERE idcom = :idcommande AND idproduit = :idproduit";
+            $update_quantity = "UPDATE commande_produit SET quantite = :quantite, prix_total = prix_unitaire*:quantite WHERE idcom = :idcommande AND idproduit = :idproduit";
             $stmt_update = $this->pdo->prepare($update_quantity);
             $execUpdate = $stmt_update->execute([
                 ':quantite' => $new_quantity,
@@ -108,8 +108,35 @@ class ProCommandeDAO{
             }
         }
     }
-    
 
+    public function get_commandDATA($idUser){
+        $query = "SELECT * FROM commande_produit as cp join product on cp.idproduit = product.id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $commande = $stmt->fetchAll();
+        $commandeDATA = array();
+        foreach($commande as $comm){
+            $commandeDATA[] = new Products($comm['id'],$comm['name'],$comm['code_barre'],$comm['prix_achat'],$comm['prix_final'],$comm['description'],$comm['quantité_min'],$comm['quantité_stock'],$comm['offre_prix'],$comm['category'],$comm['image']);
+        }
+
+        return $commandeDATA;
+
+    }
+
+
+    public function get_factureDATA($idUser){
+        $query = "SELECT * FROM commande_produit as cp join product on cp.idproduit = product.id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $factures = $stmt->fetchAll();
+        $factureDATA = array();
+        foreach($factures as $facture){
+            $factureDATA[] = new Facture($facture['name'],$facture['quantite'],$facture['prix_final'],$facture['prix_total']);
+        }
+        return $factureDATA;
+
+    }
+    
 }
 
 

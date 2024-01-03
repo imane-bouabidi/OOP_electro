@@ -122,7 +122,7 @@ if(isset($_GET['id'])){
     </section>
 
     <?php
-    // include('panier.php');
+    include('panier.php');
     include('footer.php');
     ?>
 

@@ -1,3 +1,10 @@
+<?php
+require_once './dao/comm_prdDAO.php';
+
+$products_in_comm = new ProCommandeDAO();
+$commandeDATA = $products_in_comm->get_commandDATA(3);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +14,6 @@
 </head>
 <body>
 
-<?php
-session_start();
-      require 'back/connexion/host.php';
-?>
 
   <!-- panier -->
 <div id="cartContainer" class="hidden relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
@@ -39,35 +42,31 @@ session_start();
                 <div class="flow-root">
                   <ul role="list" class="-my-6 divide-y divide-gray-200">
                     <?php 
-                    $fetch_commande = "SELECT product.*, commande_produit.* FROM product , commande_produit WHERE product.id = commande_produit.idproduit";
-                    $resut = mysqli_query($conn, $fetch_commande);
-                    $total_commande = 0;
-                    while ($row = mysqli_fetch_assoc($resut)) {
-                      $total_commande+=$row['prix_total'];
+                    foreach($commandeDATA as $commande){
                     ?>
                     <!-- products -->
                     <li class="flex py-6">
                         <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                            <img src="assets/image/<?php echo $row['image'];?>" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
+                            <img src="assets/image/<?php echo $commande->getImage(); ?>" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
                         </div>
 
                         <div class="ml-4 flex flex-1 flex-col">
                             <div>
                                 <div class="flex justify-between text-base font-medium text-gray-900">
                                     <h3>
-                                        <a href="#"><?php echo $row['name'];?></a>
+                                        <a href="#"><?php echo $commande->getName(); ?></a>
                                     </h3>
-                                    <p class="ml-4"><?php echo $row['new_price'];?> dh</p>
+                                    <p class="ml-4"><?php echo $commande->getPrix_final();?> dh</p>
                                 </div>
                             </div>
                             <div class="flex flex-1 items-end justify-between text-sm">
                                 <form action="action_cart.php" method="post">
-                                    <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                    <input type="hidden" name="product_id" value="<?php echo $commande->getId() ?>">
                                     <label for="quantity">Qty </label>
-                                    <input type="number" name="quantity" value="<?php echo $row['quantite']; ?>" min="1">
+                                    <input type="number" name="quantity" value="<?php echo $commande->get; ?>" min="1">
                                     <button type="submit" class="font-medium text-indigo-600 hover:text-indigo-500">Update</button>
                                 </form>
-                                <a href="action_cart.php?delete_id=<?php echo $row['id']; ?>">
+                                <a href="action_cart.php?delete_id=<?php echo $commande->getId() ?>">
                                     <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
                                 </a>
                             </div>
@@ -83,11 +82,13 @@ session_start();
             <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
               <div class="flex justify-between text-base font-medium text-gray-900">
                 <p>total</p>
-                <p><?php echo $total_commande;?></p>
+                <p><?php 
+                // echo $total_commande;
+                ?></p>
               </div>
               <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
               <div class="mt-6">
-                <a href="#" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</a>
+                <a href="facturePage.php" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</a>
               </div>
               <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
                 <p>

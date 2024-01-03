@@ -1,6 +1,6 @@
 <?php
 
-public class Commande{
+class Commande{
     private $idcom;
     private $date_creation;
     private $date_envoi;
